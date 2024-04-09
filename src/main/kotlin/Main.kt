@@ -1,11 +1,13 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import kotlin.concurrent.thread
@@ -16,17 +18,12 @@ class AppState {
    fun loadNotes() {
       thread {
          state.value = UiState(loading = true)
-         getNotes {
-            state.value = UiState(
-               notes = it,
-               loading = false
-            )
-         }
+         getNotes { state.value = UiState(notes = it, loading = false) }
       }
    }
 
    data class UiState(
-      var notes: List<Note> = emptyList(),
+      var notes: List<Note>? = null,
       val loading: Boolean = false
    )
 }
@@ -35,14 +32,26 @@ class AppState {
 @Preview
 fun App(appState: AppState) {
 
-   LaunchedEffect(true) { appState.loadNotes() }
+   val notes = appState.state.value.notes
+
+   if (notes == null) {
+      LaunchedEffect(true) {
+         appState.loadNotes()
+      }
+   }
 
    MaterialTheme {
-      Box(contentAlignment = Alignment.Center) {
+      Box(
+         contentAlignment = Alignment.Center,
+         modifier = Modifier.fillMaxSize()
+      ) {
          if (appState.state.value.loading) {
             CircularProgressIndicator()
          }
-         NotesList(appState.state.value.notes)
+
+         if (notes != null) {
+            NotesList(notes)
+         }
       }
    }
 }
