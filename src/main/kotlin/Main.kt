@@ -5,28 +5,11 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import kotlin.concurrent.thread
 
-class AppState {
-   val state = mutableStateOf(UiState())
-
-   fun loadNotes() {
-      thread {
-         state.value = UiState(loading = true)
-         getNotes { state.value = UiState(notes = it, loading = false) }
-      }
-   }
-
-   data class UiState(
-      var notes: List<Note>? = null,
-      val loading: Boolean = false
-   )
-}
 
 @Composable
 @Preview
