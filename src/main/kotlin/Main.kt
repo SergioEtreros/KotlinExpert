@@ -10,30 +10,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 
-
 @Composable
 @Preview
-fun App(appState: AppState) {
+fun App(appState: AppState): Unit = with(appState) {
 
-   val notes = appState.state.value.notes
-
-   if (notes == null) {
-      LaunchedEffect(true) {
-         appState.loadNotes()
-      }
-   }
-
-   MaterialTheme {
-      Box(
-         contentAlignment = Alignment.Center,
-         modifier = Modifier.fillMaxSize()
-      ) {
-         if (appState.state.value.loading) {
-            CircularProgressIndicator()
+   with(state.value){
+     if (notes == null) {
+         LaunchedEffect(true) {
+            loadNotes()
          }
+      }
 
-         if (notes != null) {
-            NotesList(notes)
+      MaterialTheme {
+         Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
+         ) {
+            if (loading) {
+               CircularProgressIndicator()
+            }
+
+            notes?.let { NotesList(it) }
          }
       }
    }
