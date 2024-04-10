@@ -14,25 +14,24 @@ import androidx.compose.ui.window.application
 @Preview
 fun App(): Unit = with(AppState) {
 
+   val notes = state.notes
 
-   with(state.value){
-     if (notes == null) {
-         LaunchedEffect(true) {
-            loadNotes()
-         }
+   if (notes == null) {
+      LaunchedEffect(true) {
+         loadNotes()
       }
+   }
 
-      MaterialTheme {
-         Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
-         ) {
-            if (loading) {
-               CircularProgressIndicator()
-            }
-
-            notes?.let { NotesList(it) }
+   MaterialTheme {
+      Box(
+         contentAlignment = Alignment.Center,
+         modifier = Modifier.fillMaxSize()
+      ) {
+         if (state.loading) {
+            CircularProgressIndicator()
          }
+
+         notes?.let { NotesList(it) }
       }
    }
 }
