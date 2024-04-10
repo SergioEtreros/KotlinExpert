@@ -12,7 +12,8 @@ import androidx.compose.ui.window.application
 
 @Composable
 @Preview
-fun App(appState: AppState): Unit = with(appState) {
+fun App(): Unit = with(AppState) {
+
 
    with(state.value){
      if (notes == null) {
@@ -38,10 +39,10 @@ fun App(appState: AppState): Unit = with(appState) {
 
 
 fun main() {
-   val state = AppState()
+
    application {
       Window(onCloseRequest = ::exitApplication) {
-         App(state)
+         App()
       }
    }
 }
