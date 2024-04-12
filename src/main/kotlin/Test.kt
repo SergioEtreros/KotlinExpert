@@ -1,3 +1,6 @@
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
+
 fun main() {
    val list: List<Note> = listOf(
       Note("Title 1", "Description 1", Note.Type.TEXT),
@@ -58,8 +61,6 @@ fun main() {
 }
 
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 data class User(val name: String, val friends: List<User> = emptyList())
 
@@ -94,13 +95,31 @@ fun test() {
 //      }
 //   }
 
-   coroutine(Dispatchers.Main) {
+//   val coroutineScope = object : CoroutineScope {
+//
+////      val job = Job()
+//      val job = SupervisorJob()
+//
+//      override val coroutineContext: CoroutineContext
+//         get() = Dispatchers.Main + job
+//
+//   }
+
+   val coroutineScope = MainScope()
+
+   val job = coroutineScope.launch {
       println("Starting")
 
       val user = userService.doLogin("user", "1234")
-      val currentFriends = userService.requestCurrentFriends(user)
-      val suggestedFriends = userService.requestSuggestedFriends(user)
-      val finalUser = user.copy(friends = currentFriends + suggestedFriends)
+      val currentFriends = async { userService.requestCurrentFriends(user) }
+      val suggestedFriends = async { userService.requestSuggestedFriends(user) }
+      val finalUser = user.copy(friends = currentFriends.await() + suggestedFriends.await())
       println(finalUser)
    }
+
+   coroutineScope.coroutineContext.job.cancel()
+//   coroutineScope.job.cancel()
+
+//   job.join()
+   job.cancel()
 }
