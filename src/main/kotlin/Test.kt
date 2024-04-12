@@ -56,3 +56,51 @@ fun main() {
    println(set)
    println(map)
 }
+
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
+data class User(val name: String, val friends: List<User> = emptyList())
+
+class UserService {
+   suspend fun doLogin(user: String, password: String): User = withContext(Dispatchers.IO) {
+      // Server request
+      User("Antonio")
+   }
+
+   suspend fun requestCurrentFriends(user: User): List<User> = withContext(Dispatchers.IO) {
+      // Server request
+      listOf(User("1"), User("2"))
+   }
+
+   suspend fun requestSuggestedFriends(user: User): List<User> = withContext(Dispatchers.IO) {
+      // Server request
+      listOf(User("3"), User("4"))
+   }
+}
+
+fun test() {
+   val userService = UserService()
+
+
+
+//   userService.doLogin("user", "1234") { user ->
+//      userService.requestCurrentFriends(user) { currentFriends ->
+//         userService.requestSuggestedFriends(user) { suggestedFriends ->
+//            val finalUser = user.copy(friends = currentFriends + suggestedFriends)
+//            println(finalUser)
+//         }
+//      }
+//   }
+
+   coroutine(Dispatchers.Main) {
+      println("Starting")
+
+      val user = userService.doLogin("user", "1234")
+      val currentFriends = userService.requestCurrentFriends(user)
+      val suggestedFriends = userService.requestSuggestedFriends(user)
+      val finalUser = user.copy(friends = currentFriends + suggestedFriends)
+      println(finalUser)
+   }
+}
