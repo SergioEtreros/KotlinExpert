@@ -5,6 +5,8 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Window
@@ -14,12 +16,10 @@ import androidx.compose.ui.window.application
 @Preview
 fun App(): Unit = with(AppState) {
 
-   val notes = state.notes
+   val state by state.collectAsState()
 
-   if (notes == null) {
-      LaunchedEffect(true) {
-         loadNotes(this)
-      }
+   LaunchedEffect(true) {
+      loadNotes(this)
    }
 
    MaterialTheme {
@@ -31,7 +31,7 @@ fun App(): Unit = with(AppState) {
             CircularProgressIndicator()
          }
 
-         notes?.let { NotesList(it) }
+         state.notes?.let { NotesList(it) }
       }
    }
 }
