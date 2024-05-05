@@ -1,4 +1,6 @@
-import Note.Type
+package com.minato.mynotes.data
+
+import com.minato.mynotes.data.Note.Type
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -8,17 +10,14 @@ data class Note(val title: String, val description: String, val type: Type) {
 }
 
 fun getNotes(): Flow<List<Note>> = flow {
-
    delay(1500)
-   var notes = emptyList<Note>()
-   (1..10).forEach {
-      notes = notes + Note(
+   val notes = (0..10).map {
+      Note(
          "Title $it",
          "Description $it",
          if (it % 3 == 0) Type.AUDIO else Type.TEXT
       )
-      emit(notes)
-      delay(1000)
    }
+   emit(notes)
 }
 

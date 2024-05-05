@@ -1,3 +1,5 @@
+package com.minato.mynotes.ui.screens.home
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.minato.mynotes.data.Note
 
 @Composable
 fun NotesList(notes: List<Note>) {

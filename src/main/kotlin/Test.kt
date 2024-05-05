@@ -1,5 +1,5 @@
+import com.minato.mynotes.data.Note
 import kotlinx.coroutines.*
-import kotlin.coroutines.CoroutineContext
 
 fun main() {
    val list: List<Note> = listOf(
