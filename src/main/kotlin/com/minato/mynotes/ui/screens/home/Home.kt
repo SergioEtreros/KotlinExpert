@@ -26,7 +26,7 @@ fun Home(): Unit = with(HomeState) {
 
    MaterialTheme {
       Scaffold(
-         topBar = { TopBar() }
+         topBar = { TopBar(::onFilterClick) }
       ) { paddingValues ->
          Box(
             contentAlignment = Alignment.Center,
@@ -38,7 +38,7 @@ fun Home(): Unit = with(HomeState) {
                CircularProgressIndicator()
             }
 
-            state.notes?.let { NotesList(it) }
+            state.filterNotes?.let { NotesList(it) }
          }
       }
    }
